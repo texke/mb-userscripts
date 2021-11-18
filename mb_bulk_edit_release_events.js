@@ -9,7 +9,7 @@
 // @match       *://*.musicbrainz.org/*/release/add
 // @match       https://etc.marlonob.info/atisket/*
 // @match       https://atisket.pulsewidth.org.uk/*
-// @version     2021.11.18.1
+// @version     2021.11.18.2
 // @author      texke
 // @license     MIT; https://opensource.org/licenses/MIT
 // @description Copy and input release events from atisket into MB.
@@ -358,6 +358,7 @@ function handleAtisket() {
 
 const repertoireToHandler = {
   'etc.marlonob.info': handleAtisket,
+  'atisket.pulsewidth.org.uk': handleAtisket,
 };
 
 if (document.location.hostname === 'musicbrainz.org' || document.location.hostname.endsWith('.musicbrainz.org')) {
