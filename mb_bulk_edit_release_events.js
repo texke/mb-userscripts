@@ -300,21 +300,25 @@ function handleMB() {
   }
 
   function readData() {
-    while(document.querySelector('button.remove-release-event')) {
-      let removeEventBtn = document.querySelector('button.remove-release-event');
-      removeEventBtn.click();
-    }
     let data = GM_getValue('ReleaseEventsData');
-    let newRowBtn = document.querySelector('button[title="Add Release Event"]');
     if(data) {
+      let newRowBtn = document.querySelector('button[title="Add Release Event"]');
+      while(document.querySelector('button.remove-release-event')) {
+        let removeEventBtn = document.querySelector('button.remove-release-event');
+        removeEventBtn.click();
+      }
       var count = 0;
       data = JSON.parse(data);
       data.forEach(event => {        
         newRowBtn.click();
         document.querySelectorAll('.partial-date-year')[count].value = event.year;
+        document.querySelectorAll('.partial-date-year')[count].dispatchEvent(new Event('change'));
         document.querySelectorAll('.partial-date-month')[count].value = event.month;
+        document.querySelectorAll('.partial-date-month')[count].dispatchEvent(new Event('change'));
         document.querySelectorAll('.partial-date-day')[count].value = event.day;
+        document.querySelectorAll('.partial-date-day')[count].dispatchEvent(new Event('change'));
         document.getElementById('country-' + count).value = COUNTRY_CODES[event.country];
+        document.getElementById('country-' + count).dispatchEvent(new Event('change'));
         count++;
       });
     }
