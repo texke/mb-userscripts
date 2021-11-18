@@ -1,6 +1,8 @@
 // ==UserScript==
 // @name        MB: Bulk Edit Release Events 
 // @namespace   https://github.com/texke/mb-userscripts
+// @downloadURL https://raw.githubusercontent.com/texke/mb-userscripts/main/mb_bulk_edit_release_events.js
+// @updateURL   https://raw.githubusercontent.com/texke/mb-userscripts/main/mb_bulk_edit_release_events.js
 // @match       *://musicbrainz.org/release/*/edit
 // @match       *://*.musicbrainz.org/release/*/edit
 // @match       *://musicbrainz.org/release/add
@@ -9,7 +11,7 @@
 // @version     2021.11.16.1
 // @author      texke
 // @license     MIT; https://opensource.org/licenses/MIT
-// @description 16/11/2021 20:53:14
+// @description Copy and input release events from atisket into MB.
 // @run-at      document-end
 // @grant       GM_getValue
 // @grant       GM_setValue
