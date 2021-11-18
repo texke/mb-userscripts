@@ -8,7 +8,8 @@
 // @match       *://musicbrainz.org/release/add
 // @match       *://*.musicbrainz.org/*/release/add
 // @match       https://etc.marlonob.info/atisket/*
-// @version     2021.11.16.1
+// @match       https://atisket.pulsewidth.org.uk/*
+// @version     2021.11.18.1
 // @author      texke
 // @license     MIT; https://opensource.org/licenses/MIT
 // @description Copy and input release events from atisket into MB.
