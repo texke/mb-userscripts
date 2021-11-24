@@ -9,7 +9,7 @@
 // @match       *://*.musicbrainz.org/*/release/add
 // @match       https://etc.marlonob.info/atisket/*
 // @match       https://atisket.pulsewidth.org.uk/*
-// @version     2021.11.18.2
+// @version     2021.11.24.1
 // @author      texke
 // @license     MIT; https://opensource.org/licenses/MIT
 // @description Copy and input release events from atisket into MB.
@@ -292,12 +292,13 @@ function handleMB() {
   document.querySelector('.add-item').insertAdjacentHTML('beforeend', mainUIHTML);
   document.querySelector('button#texke_MB_Bulk_Edit_Release_Events').addEventListener('click', (evt) => { readData(); });
   
-  function setRowKey(select, countryKey) {
-    let idx = [...select.options].findIndex(opt => opt.text.trim() === countryKey);
-    if(idx < 0) {
-      throw new Error('Unknown country key');
+  function fillEditNoteBottom(content) {
+    let note = this.form.querySelector('textarea[id="edit-note-text"]');
+    if(note.value == '') {
+      note.value = content;
+    } else {
+      note.value += '\n' + content;
     }
-    select.selectedIndex = idx;
   }
 
   function readData() {
@@ -309,19 +310,26 @@ function handleMB() {
         removeEventBtn.click();
       }
       var count = 0;
+      var atisketURL = '';
       data = JSON.parse(data);
-      data.forEach(event => {        
-        newRowBtn.click();
-        document.querySelectorAll('.partial-date-year')[count].value = event.year;
-        document.querySelectorAll('.partial-date-year')[count].dispatchEvent(new Event('change'));
-        document.querySelectorAll('.partial-date-month')[count].value = event.month;
-        document.querySelectorAll('.partial-date-month')[count].dispatchEvent(new Event('change'));
-        document.querySelectorAll('.partial-date-day')[count].value = event.day;
-        document.querySelectorAll('.partial-date-day')[count].dispatchEvent(new Event('change'));
-        document.getElementById('country-' + count).value = COUNTRY_CODES[event.country];
-        document.getElementById('country-' + count).dispatchEvent(new Event('change'));
-        count++;
+      data.forEach(event => {
+        if(event.url === undefined) {
+          newRowBtn.click();
+          document.querySelectorAll('.partial-date-year')[count].value = event.year;
+          document.querySelectorAll('.partial-date-year')[count].dispatchEvent(new Event('change'));
+          document.querySelectorAll('.partial-date-month')[count].value = event.month;
+          document.querySelectorAll('.partial-date-month')[count].dispatchEvent(new Event('change'));
+          document.querySelectorAll('.partial-date-day')[count].value = event.day;
+          document.querySelectorAll('.partial-date-day')[count].dispatchEvent(new Event('change'));
+          document.getElementById('country-' + count).value = COUNTRY_CODES[event.country];
+          document.getElementById('country-' + count).dispatchEvent(new Event('change'));
+          count++;
+        } else {
+          atisketURL = event.url;
+        }
       });
+      let editNoteBottom = `Imported release events from ` + atisketURL + ` using ${GM_info.script.name} v${GM_info.script.version}`;
+      fillEditNoteBottom(editNoteBottom);
     }
     // Reset again to prevent filling the same data on another edit page
     GM_deleteValue('ReleaseEventsData');
@@ -340,6 +348,8 @@ function handleAtisket() {
     let entries = entry.querySelectorAll('input');
     const events = [];
     var obj = {};
+    obj['url'] = document.getElementById("submit").querySelector('a').getAttribute('href');
+    events.push(obj);
     entries.forEach(element => {
       var elementSplit = element.name.split('.');
       var id = elementSplit[1];
@@ -353,6 +363,7 @@ function handleAtisket() {
       }
     });
     GM_setValue('ReleaseEventsData', JSON.stringify(events));
+    document.getElementById('texke_MB_Bulk_Edit_Release_Events').innerHTML = 'Copied!';
   }
 }
 
