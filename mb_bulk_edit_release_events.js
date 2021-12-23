@@ -9,7 +9,7 @@
 // @match       *://*.musicbrainz.org/*/release/add
 // @match       https://etc.marlonob.info/atisket/*
 // @match       https://atisket.pulsewidth.org.uk/*
-// @version     2021.11.24.1
+// @version     2021.12.23.1
 // @author      texke
 // @license     MIT; https://opensource.org/licenses/MIT
 // @description Copy and input release events from atisket into MB.
@@ -299,6 +299,7 @@ function handleMB() {
     } else {
       note.value += '\n' + content;
     }
+    this.form.querySelector('textarea[id="edit-note-text"]').dispatchEvent(new Event('change'));
   }
 
   function readData() {
