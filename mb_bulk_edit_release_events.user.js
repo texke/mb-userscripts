@@ -9,7 +9,7 @@
 // @match       *://*.musicbrainz.org/*/release/add
 // @match       https://etc.marlonob.info/atisket/*
 // @match       https://atisket.pulsewidth.org.uk/*
-// @version     2021.12.24.1
+// @version     2021.12.25.1
 // @author      texke
 // @license     MIT; https://opensource.org/licenses/MIT
 // @description Copy and input release events from atisket into MB.
@@ -338,6 +338,16 @@ function handleMB() {
 }
 
 function handleAtisket() {
+  if(document.location.hostname == 'etc.marlonob.info') {
+    let isrclinks = document.querySelectorAll("a[href^='https://tatsumo.pythonanywhere.com']");
+    if(isrclinks.length > 0) {
+      let spotifyID = isrclinks[0].href.replace('https://tatsumo.pythonanywhere.com/album/', '');
+      for(var i = 0, l = isrclinks.length; i < l; i++) {
+        var isrclink = isrclinks[i];
+        isrclink.href = 'https://d.ontun.es/?entity=album&id=' + spotifyID;
+      }
+    }
+  }
   if(document.getElementById("all-release-events")) {
     const mainUIHTML = `<button type="button" id="texke_MB_Bulk_Edit_Release_Events" class="with-label add-item" title="Copy Release Events">Copy Release Events</button>`
     document.querySelector('#all-release-events').insertAdjacentHTML('beforebegin', mainUIHTML);
