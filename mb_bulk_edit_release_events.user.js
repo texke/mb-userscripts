@@ -9,7 +9,7 @@
 // @match       *://*.musicbrainz.org/*/release/add
 // @match       https://etc.marlonob.info/atisket/*
 // @match       https://atisket.pulsewidth.org.uk/*
-// @version     2021.12.25.1
+// @version     2022.05.03.1
 // @author      texke
 // @license     MIT; https://opensource.org/licenses/MIT
 // @description Copy and input release events from atisket into MB.
@@ -316,13 +316,19 @@ function handleMB() {
       data.forEach(event => {
         if(event.url === undefined) {
           newRowBtn.click();
-          document.querySelectorAll('.partial-date-year')[count].value = event.year;
-          document.querySelectorAll('.partial-date-year')[count].dispatchEvent(new Event('change'));
-          document.querySelectorAll('.partial-date-month')[count].value = event.month;
-          document.querySelectorAll('.partial-date-month')[count].dispatchEvent(new Event('change'));
-          document.querySelectorAll('.partial-date-day')[count].value = event.day;
-          document.querySelectorAll('.partial-date-day')[count].dispatchEvent(new Event('change'));
+          if(event.year == '0' && event.month == '0' && event.day == '0') {
+            document.querySelectorAll('.partial-date-year')[count].value = '';            
+            document.querySelectorAll('.partial-date-month')[count].value = '';            
+            document.querySelectorAll('.partial-date-day')[count].value = '';            
+          } else {
+            document.querySelectorAll('.partial-date-year')[count].value = event.year;
+            document.querySelectorAll('.partial-date-month')[count].value = event.month;
+            document.querySelectorAll('.partial-date-day')[count].value = event.day;
+          }          
           document.getElementById('country-' + count).value = COUNTRY_CODES[event.country];
+          document.querySelectorAll('.partial-date-year')[count].dispatchEvent(new Event('change'));
+          document.querySelectorAll('.partial-date-month')[count].dispatchEvent(new Event('change'));
+          document.querySelectorAll('.partial-date-day')[count].dispatchEvent(new Event('change'));
           document.getElementById('country-' + count).dispatchEvent(new Event('change'));
           count++;
         } else {
