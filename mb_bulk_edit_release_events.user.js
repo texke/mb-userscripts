@@ -9,7 +9,7 @@
 // @match       *://*.musicbrainz.org/*/release/add
 // @match       https://etc.marlonob.info/atisket/*
 // @match       https://atisket.pulsewidth.org.uk/*
-// @version     2022.05.03.1
+// @version     2024.02.05.1
 // @author      texke
 // @license     MIT; https://opensource.org/licenses/MIT
 // @description Copy and input release events from atisket into MB.
@@ -305,7 +305,7 @@ function handleMB() {
   function readData() {
     let data = GM_getValue('ReleaseEventsData');
     if(data) {
-      let newRowBtn = document.querySelector('button[title="Add Release Event"]');
+      let newRowBtn = document.querySelector('button[title="Add release event"]');
       while(document.querySelector('button.remove-release-event')) {
         let removeEventBtn = document.querySelector('button.remove-release-event');
         removeEventBtn.click();
