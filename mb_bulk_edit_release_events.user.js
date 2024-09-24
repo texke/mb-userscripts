@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        MB: Bulk Edit Release Events 
+// @name        MB: Bulk Edit Release Events
 // @namespace   https://github.com/texke/mb-userscripts
 // @downloadURL https://raw.githubusercontent.com/texke/mb-userscripts/main/mb_bulk_edit_release_events.user.js
 // @updateURL   https://raw.githubusercontent.com/texke/mb-userscripts/main/mb_bulk_edit_release_events.user.js
@@ -9,7 +9,7 @@
 // @match       *://*.musicbrainz.org/*/release/add
 // @match       https://etc.marlonob.info/atisket/*
 // @match       https://atisket.pulsewidth.org.uk/*
-// @version     2024.02.05.1
+// @version     2024.09.24.1
 // @author      texke
 // @license     MIT; https://opensource.org/licenses/MIT
 // @description Copy and input release events from atisket into MB.
@@ -22,13 +22,13 @@
 
 // Loosely based on ROpdebee's MB: Bulk copy-paste work codes
 // https://raw.github.com/ROpdebee/mb-userscripts/main/mb_bulk_copy_work_codes.user.js
-// 
-// 
+//
+//
 // Style and concept by loujine
 // https://github.com/loujine/musicbrainz-scripts/blob/master/mbz-loujine-common.js (MIT license).
 
 function handleMB() {
-  const COUNTRY_CODES = { 
+  const COUNTRY_CODES = {
     AF: 1,
     AL: 2,
     DZ: 3,
@@ -291,7 +291,7 @@ function handleMB() {
   const mainUIHTML = `<br /><button type="button" id="texke_MB_Bulk_Edit_Release_Events" class="with-label add-item" title="Bulk paste Release Events">Bulk paste Release Events</button>`
   document.querySelector('.add-item').insertAdjacentHTML('beforeend', mainUIHTML);
   document.querySelector('button#texke_MB_Bulk_Edit_Release_Events').addEventListener('click', (evt) => { readData(); });
-  
+
   function fillEditNoteBottom(content) {
     let note = this.form.querySelector('textarea[id="edit-note-text"]');
     if(note.value == '') {
@@ -317,14 +317,14 @@ function handleMB() {
         if(event.url === undefined) {
           newRowBtn.click();
           if(event.year == '0' && event.month == '0' && event.day == '0') {
-            document.querySelectorAll('.partial-date-year')[count].value = '';            
-            document.querySelectorAll('.partial-date-month')[count].value = '';            
-            document.querySelectorAll('.partial-date-day')[count].value = '';            
+            document.querySelectorAll('.partial-date-year')[count].value = '';
+            document.querySelectorAll('.partial-date-month')[count].value = '';
+            document.querySelectorAll('.partial-date-day')[count].value = '';
           } else {
             document.querySelectorAll('.partial-date-year')[count].value = event.year;
             document.querySelectorAll('.partial-date-month')[count].value = event.month;
             document.querySelectorAll('.partial-date-day')[count].value = event.day;
-          }          
+          }
           document.getElementById('country-' + count).value = COUNTRY_CODES[event.country];
           document.querySelectorAll('.partial-date-year')[count].dispatchEvent(new Event('change'));
           document.querySelectorAll('.partial-date-month')[count].dispatchEvent(new Event('change'));
@@ -353,13 +353,22 @@ function handleAtisket() {
         isrclink.href = 'https://d.ontun.es/?entity=album&id=' + spotifyID;
       }
     }
+  } else if(document.location.hostname == 'atisket.pulsewidth.org.uk') { // Temp/permanent replace d.ontun.es with isrchunt.com
+    let isrclinks = document.querySelectorAll("a[href^='https://d.ontun.es']");
+    if(isrclinks.length > 0) {
+      let spotifyID = isrclinks[0].href.replace('https://d.ontun.es/?entity=album&id=', '');
+      for(var i = 0, l = isrclinks.length; i < l; i++) {
+        var isrclink = isrclinks[i];
+        isrclink.href = 'https://isrchunt.com/spotify/importisrc?releaseId=' + spotifyID;
+      }
+    }
   }
   if(document.getElementById("all-release-events")) {
     const mainUIHTML = `<button type="button" id="texke_MB_Bulk_Edit_Release_Events" class="with-label add-item" title="Copy Release Events">Copy Release Events</button>`
     document.querySelector('#all-release-events').insertAdjacentHTML('beforebegin', mainUIHTML);
     document.querySelector('button#texke_MB_Bulk_Edit_Release_Events').addEventListener('click', (evt) => { parseAndCopy(); });
   }
-  
+
   function parseAndCopy() {
     let entry = document.getElementById("all-release-events");
     let entries = entry.querySelectorAll('input');
